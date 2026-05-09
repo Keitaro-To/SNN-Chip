@@ -28,8 +28,9 @@ SNN/
 │  └─ waves/             # VCD/FST (gitignore)
 │
 ├─ scripts/              # ビルドランナー (run.ps1 等)
-├─ docs/                 # 仕様書、状態遷移図
-├─ legacy/               # 重複/不整合のため隔離 (要レビュー)
+├─ docs/
+│  └─ papers/            # 論文ノート (PDF は git 管理外、Markdown 化版を git 管理)
+├─ .cursor/              # Cursor 設定 (rules / skills / agents)
 │
 ├─ Makefile              # GNU make 用 (任意)
 ├─ .gitignore

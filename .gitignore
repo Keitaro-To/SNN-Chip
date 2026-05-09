@@ -34,6 +34,11 @@ transcript
 runs/
 results/
 
+# --- Papers (PDF 本体は配布権の関係で git に入れない) ---
+# Markdown 化した版 (docs/papers/*.md) は git 管理する
+docs/papers/*.pdf
+docs/papers/**/*.pdf
+
 # Allow placeholders inside ignored dirs
 !sim/build/.gitkeep
 !sim/waves/.gitkeep
