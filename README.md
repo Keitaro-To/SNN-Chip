@@ -104,15 +104,21 @@ make clean
 
 ---
 
-## `legacy/` フォルダについて
+## VHDL → SystemVerilog 変換の命名規約
 
-整理時点で **使用すべきでないファイル** を隔離した置き場所。compile されないので
-ビルドには影響しない。レビューしてから削除/統合すること。
+元の VHDL は識別子の大小文字を区別しないため `reset` と `RESET` が同義になるが、
+SystemVerilog は区別する。状態名と信号名・キーワード風の名前が混ざって読みにくく
+なるのを避けるため、**パッケージの列挙子は大文字プレフィックス付き** に統一する。
 
-| ファイル | 内容 | 推奨対応 |
+| パッケージ内の型 | プレフィックス | 例 |
 | --- | --- | --- |
-| `spiker_pkg_legacy.sv` | 旧版 `spiker_pkg`(`reset/idle/...` 小文字)。現在の `rtl/pkg/spiker_pkg.sv` (`MI_*`/`MC_*`/`NS_*` 大文字) と衝突する。 | 確認の上、削除 |
-| `barrier_cu_dup.sv` | 旧 `barrier_cu_tb.sv`。実体は `barrier_cu` 設計の重複コピー(TB ではない)。 | 削除 |
+| `mi_states_t` | `MI_` | `MI_RESET`, `MI_IDLE`, `MI_SAMPLE`, ... |
+| `mc_states_t` | `MC_` | `MC_RESET`, `MC_IDLE`, `MC_NETWORK_UPDATE`, ... |
+| `neuron_states_t` | `NS_` | `NS_RESET`, `NS_EXCITE`, `NS_FIRE`, ... |
+
+過去の小文字版(`reset`, `idle`, ...) を含む旧パッケージとそれを使う旧モジュールは
+`09f97d3` (snapshot) のスナップショットコミットに残っており、必要であれば
+`git show 09f97d3:<path>` で参照できる。
 
 ---
 
