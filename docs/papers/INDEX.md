@@ -16,6 +16,26 @@
 
 <!-- ここから下にエントリを追加していく。フォーマットは下のテンプレ参照。 -->
 
+### Spiker+ (本リポジトリの土台論文)
+
+- **正式タイトル**: Spiker+: A Framework for the Generation of Efficient Spiking
+  Neural Networks FPGA Accelerators for Inference at the Edge
+- **著者 / 年**: A. Carpegna, A. Savino, S. Di Carlo, 2025
+- **会議 / 雑誌**: IEEE Transactions on Emerging Topics in Computing, vol. 13,
+  no. 3, pp. 784-798, Jul-Sep 2025
+- **DOI**: <https://doi.org/10.1109/TETC.2024.3511676>
+- **ライセンス**: CC-BY 4.0 (オープンアクセス)
+- **対応 Markdown**: [spiker-plus.md](spiker-plus.md)
+- **PDF (ローカルのみ)**: `spiker-plus.pdf`
+- **公式リポジトリ**: <https://github.com/smilies-polito/Spiker>
+- **興味のある章**: §IV (Architecture), §V (Configuration framework), §VI (Results)
+- **要点メモ**: 本リポジトリ `rtl/` はこの論文 §IV の自動生成 VHDL を SystemVerilog に
+  書き換えたもの。`spiker_pkg` の `mi_*/mc_*/neuron_states_t` は §IV.B〜D の
+  3 階層 CU にそのまま対応する。LIF 6 種、reset 2 種、FF-FC / FC-R アーキテクチャ、
+  bit-shift / AND / 減算で乗算を消す設計の根拠が全部ここに書いてある。
+
+---
+
 ### TEMPLATE: <Short title>
 
 - **正式タイトル**: <Full Title of the Paper>
