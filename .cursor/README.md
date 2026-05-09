@@ -39,4 +39,4 @@
 
 | 名前 | 役割 |
 |------|------|
-| `paper-reader` | `docs/papers/` の Markdown 化された論文ノートを参照して文献の質問に答える (readonly) |
+| `paper-reader` | ローカル `docs/papers/` の PDF（直下は `.gitignore` で無視）をテキスト抽出して文献の質問に答える (readonly) |

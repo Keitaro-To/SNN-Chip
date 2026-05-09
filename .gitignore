@@ -34,10 +34,10 @@ transcript
 runs/
 results/
 
-# --- Papers (PDF 本体は配布権の関係で git に入れない) ---
-# Markdown 化した版 (docs/papers/*.md) は git 管理する
-docs/papers/*.pdf
-docs/papers/**/*.pdf
+# --- docs/papers: 個人用（PDF・メモなどすべてローカルのみ、フォルダだけ git で維持） ---
+# 直下のみ無視（サブフォルダ内は別途必要ならルール追加）
+docs/papers/*
+!docs/papers/.gitkeep
 
 # Allow placeholders inside ignored dirs
 !sim/build/.gitkeep
