@@ -113,8 +113,6 @@ make clean
 | --- | --- | --- |
 | `spiker_pkg_legacy.sv` | 旧版 `spiker_pkg`(`reset/idle/...` 小文字)。現在の `rtl/pkg/spiker_pkg.sv` (`MI_*`/`MC_*`/`NS_*` 大文字) と衝突する。 | 確認の上、削除 |
 | `barrier_cu_dup.sv` | 旧 `barrier_cu_tb.sv`。実体は `barrier_cu` 設計の重複コピー(TB ではない)。 | 削除 |
-| `mux_16to1_dup.sv` | 旧 `mux_16to1_tb.sv`。実体は `mux_16to1` 設計の重複コピー。 | 削除 |
-| `mux_8to1_dup.sv`  | 旧 `mux_8to1_tb.sv`。実体は `mux_8to1` 設計の重複コピー。 | 削除 |
 
 ---
 
