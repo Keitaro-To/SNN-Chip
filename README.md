@@ -29,7 +29,7 @@ SNN/
 │
 ├─ scripts/              # ビルドランナー (run.ps1 等)
 ├─ docs/
-│  └─ papers/            # 論文ノート (PDF は git 管理外、Markdown 化版を git 管理)
+│  └─ papers/            # 論文 PDF（個人用。`.gitignore` は直下のみ無視、サブフォルダは別）
 ├─ .cursor/              # Cursor 設定 (rules / skills / agents)
 │
 ├─ Makefile              # GNU make 用 (任意)
