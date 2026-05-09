@@ -26,16 +26,22 @@ VCD_FILE      := $(WAVES_DIR)/$(VCD_NAME)
 IVERILOG      ?= iverilog
 VVP           ?= vvp
 GTKWAVE       ?= gtkwave
+VERILATOR     ?= verilator
+LINT_TARGET   ?= rtl_all
+LINT_TOP      ?= $(if $(filter rtl_all,$(LINT_TARGET)),network,$(LINT_TARGET))
 
-.PHONY: sim build wave list all clean help
+.PHONY: sim build wave lint lint-strict list all clean help
 
 help:
 	@echo "Targets:"
-	@echo "  make TOP=<name> sim   - build & run testbench"
-	@echo "  make TOP=<name> wave  - run sim and open GTKWave"
-	@echo "  make list             - list available TOPs"
-	@echo "  make all              - run every testbench"
-	@echo "  make clean            - remove build artifacts"
+	@echo "  make TOP=<name> sim         - build & run testbench"
+	@echo "  make TOP=<name> wave        - run sim and open GTKWave"
+	@echo "  make lint                   - Verilator lint of rtl_all (top=network)"
+	@echo "  make LINT_TARGET=<n> lint   - Verilator lint of <n>.f (top=<n>)"
+	@echo "  make lint-strict            - same as lint, but with -Wall"
+	@echo "  make list                   - list available TOPs"
+	@echo "  make all                    - run every testbench"
+	@echo "  make clean                  - remove build artifacts"
 
 sim: $(VVP_FILE)
 	@cd $(BUILD_DIR) && $(VVP) $(TOP).vvp
@@ -73,6 +79,12 @@ all:
 	  echo "===== $$base ====="; \
 	  $(MAKE) --no-print-directory TOP=$$base sim || fail=1; \
 	done; exit $$fail
+
+lint: | $(BUILD_DIR)
+	@cd $(BUILD_DIR) && $(VERILATOR) --lint-only --top-module $(LINT_TOP) -f $(ROOT)/$(FILELIST_DIR)/$(LINT_TARGET).f
+
+lint-strict: | $(BUILD_DIR)
+	@cd $(BUILD_DIR) && $(VERILATOR) --lint-only -Wall --top-module $(LINT_TOP) -f $(ROOT)/$(FILELIST_DIR)/$(LINT_TARGET).f
 
 clean:
 	@rm -rf $(BUILD_DIR)/*.vvp $(BUILD_DIR)/*.out $(WAVES_DIR)/*.vcd $(WAVES_DIR)/*.fst

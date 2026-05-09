@@ -61,6 +61,11 @@ SNN/
 # 全 TB を順番に実行
 .\scripts\run.ps1 all
 
+# Verilator lint (WSL Ubuntu の verilator を使用)
+.\scripts\run.ps1 lint                 # rtl_all を lint (top=network)
+.\scripts\run.ps1 lint barrier         # 個別ターゲットの lint
+.\scripts\run.ps1 lint -Strict         # -Wall を付与し警告も fail にする
+
 # 成果物クリア
 .\scripts\run.ps1 clean
 ```
@@ -72,6 +77,9 @@ make TOP=barrier sim
 make TOP=multi_cycle wave
 make list
 make all
+make lint                       # rtl_all を Verilator lint
+make LINT_TARGET=barrier lint   # 個別ターゲットを lint
+make lint-strict                # -Wall を付与
 make clean
 ```
 
@@ -137,10 +145,9 @@ SystemVerilog は区別する。状態名と信号名・キーワード風の名
 
 ## 将来の拡張ポイント
 
-- **lint**: `verilator --lint-only -f sim/filelists/rtl_all.f` を CI に追加
-- **高速シミュ**: Verilator(C++ ラップで 10〜100倍高速、SNN 規模に有用)
+- **高速シミュ**: Verilator 本体(C++ ラップで 10〜100倍高速、SNN 規模に有用)
 - **波形フォーマット**: VCD → FST (GTKWave、サイズ 1/10 以下)
-- **CI**: GitHub Actions で `make all` を回す
+- **CI**: GitHub Actions で `make all` + `make lint-strict` を回す
 - **合成バックエンド**:
   - FPGA: Vivado XSim / Yosys+nextpnr
   - ASIC: OpenLane (Sky130/IHP130)
@@ -149,5 +156,6 @@ SystemVerilog は区別する。状態名と信号名・キーワード風の名
 
 ## ツール
 
-- [Icarus Verilog 12.0](https://github.com/steveicarus/iverilog) — `iverilog`, `vvp`
+- [Icarus Verilog 12.0](https://github.com/steveicarus/iverilog) — `iverilog`, `vvp` (シミュレーション)
+- [Verilator 5.x](https://www.veripool.org/verilator/) — `--lint-only` で構文/論理チェック (WSL Ubuntu 経由)
 - [GTKWave](http://gtkwave.sourceforge.net/) — 波形ビューア (Icarus に同梱)

@@ -13,6 +13,9 @@
   .\scripts\run.ps1 build barrier
   .\scripts\run.ps1 sim   barrier
   .\scripts\run.ps1 wave  barrier
+  .\scripts\run.ps1 lint              # rtl_all を Verilator で lint
+  .\scripts\run.ps1 lint barrier      # 個別ターゲットの lint
+  .\scripts\run.ps1 lint -Strict      # -Wall を付与し警告も fail にする
   .\scripts\run.ps1 list
   .\scripts\run.ps1 clean
 #>
@@ -20,11 +23,13 @@
 [CmdletBinding()]
 param(
   [Parameter(Position=0)]
-  [ValidateSet('build','sim','wave','list','clean','all')]
+  [ValidateSet('build','sim','wave','lint','list','clean','all')]
   [string]$Action = 'sim',
 
   [Parameter(Position=1)]
-  [string]$Top = ''
+  [string]$Top = '',
+
+  [switch]$Strict
 )
 
 $ErrorActionPreference = 'Stop'
@@ -119,6 +124,34 @@ function Invoke-Wave {
   Start-Process gtkwave -ArgumentList @($vcd)
 }
 
+function Invoke-Lint {
+  # Verilator は WSL Ubuntu の /usr/bin/verilator を呼ぶ
+  $target = if ([string]::IsNullOrWhiteSpace($Top)) { 'rtl_all' } else { $Top }
+  $f = Join-Path $FilelistsDir "$target.f"
+  if (-not (Test-Path $f)) { throw "filelist が見つかりません: $f" }
+
+  # rtl_all は TB を含まないので最上位は network。それ以外は target 名と一致する
+  # 設計モジュールを最上位とみなす(個別 lint 用、TB は含めない方が綺麗)。
+  $topModule = if ($target -eq 'rtl_all') { 'network' } else { $target }
+
+  $vargs = @('--lint-only', '--top-module', $topModule, '-f', "../filelists/$target.f")
+  if ($Strict) { $vargs += '-Wall' }
+
+  Ensure-Dirs
+  $cwd = $BuildDir
+  $prevEAP = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    Write-Host "[lint]  wsl -d Ubuntu --cd $cwd -- verilator $($vargs -join ' ')" -ForegroundColor Cyan
+    & wsl -d Ubuntu --cd $cwd -- verilator @vargs 2>&1 | ForEach-Object { Write-Host $_ }
+    $code = $LASTEXITCODE
+  } finally {
+    $ErrorActionPreference = $prevEAP
+  }
+  if ($code -ne 0) { throw "verilator lint failed (exit=$code)" }
+  Write-Host "[lint]  OK ($target, top=$topModule$(if($Strict){', -Wall'}))" -ForegroundColor Green
+}
+
 function Invoke-Clean {
   if (Test-Path $BuildDir) {
     Get-ChildItem $BuildDir -Exclude '.gitkeep' -Force | Remove-Item -Recurse -Force
@@ -150,6 +183,7 @@ switch ($Action) {
   'build' { Invoke-Build }
   'sim'   { Invoke-Sim }
   'wave'  { Invoke-Wave }
+  'lint'  { Invoke-Lint }
   'list'  { List-Targets }
   'clean' { Invoke-Clean }
   'all'   { Invoke-All }
