@@ -1,0 +1,39 @@
+# --- Simulation build artifacts ---
+sim/build/
+sim/waves/
+*.vvp
+*.vcd
+*.fst
+*.lxt
+*.lxt2
+*.out
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+*.swp
+*~
+Thumbs.db
+.DS_Store
+
+# --- Logs ---
+*.log
+transcript
+
+# --- Vivado / FPGA backend (将来用) ---
+*.jou
+*.str
+*.cache/
+*.hw/
+*.sim/
+*.runs/
+*.gen/
+.Xil/
+
+# --- Yosys / OpenLane (将来用) ---
+runs/
+results/
+
+# Allow placeholders inside ignored dirs
+!sim/build/.gitkeep
+!sim/waves/.gitkeep

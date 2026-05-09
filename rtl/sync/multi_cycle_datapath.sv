@@ -1,5 +1,5 @@
-// From vivado_project_prototype/multi_cycle_dapapath.vhd
-module multi_cycle_dapapath #(
+// From vivado_project_prototype/multi_cycle_datapath.vhd
+module multi_cycle_datapath #(
   parameter int cycles_cnt_bitwidth = 4,
   parameter int n_cycles            = 5
 ) (

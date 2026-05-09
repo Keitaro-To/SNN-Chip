@@ -16,7 +16,7 @@ module multi_cycle #(
   logic cycles_cnt_rst_n;
   logic stop;
 
-  multi_cycle_dapapath #(
+  multi_cycle_datapath #(
     .cycles_cnt_bitwidth(cycles_cnt_bitwidth),
     .n_cycles(n_cycles)
   ) datapath (
