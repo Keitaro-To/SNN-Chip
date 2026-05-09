@@ -1,0 +1,64 @@
+---
+description: SNN チップ (SystemVerilog) 開発リポジトリの構成・命名規約・ビルド手順
+alwaysApply: true
+---
+
+# SNN チップ開発の規約
+
+## ディレクトリ配置
+
+| 種別 | 置く場所 |
+|------|----------|
+| パッケージ (`spiker_pkg` など) | `rtl/pkg/` |
+| 汎用部品 (mux, reg, cnt, cmp, ...) | `rtl/common/` |
+| ROM などメモリ | `rtl/mem/` |
+| 同期/制御 (barrier, multi_cycle) | `rtl/sync/` |
+| ニューロン本体 | `rtl/neuron/` |
+| ネットワーク・レイヤ | `rtl/network/` |
+| トップレベル | `rtl/top/` |
+| 単体 TB | `tb/unit/` |
+| 結合 TB | `tb/system/` |
+
+合成可能な RTL は必ず `rtl/`、テストベンチは必ず `tb/` に置く。混ぜない。
+
+## 命名規約
+
+- **状態列挙子は大文字プレフィックス必須**:
+  `mi_states_t` → `MI_*`、`mc_states_t` → `MC_*`、`neuron_states_t` → `NS_*`。
+  小文字 (`reset`, `idle`, ...) は VHDL からの初期変換時の名残で禁止。
+- **TB ファイル名は `<module>_tb.sv`、内部の module 名も `<module>_tb`**。
+  TB ではない設計コードを `_tb.sv` で保存しない (legacy で発生済みの事故)。
+- **TB 内の DUT インスタンス名は `dut`** に統一。
+- **typo 注意**: `datapath` (× `dapapath`)。
+
+## ビルドフロー
+
+- ソースの場所はテストベンチに直書きせず、`sim/filelists/<top>.f` に列挙する。
+- `common.f` を `-f common.f` で取り込んで DRY 化する。
+- iverilog のコマンドファイルは **`#` がコメント** (`//` ではない)。
+- コンパイル方言指定 (`-g2012`) は `.f` ではなくコマンドラインで渡す。
+- 実行 CWD は `sim/build/`。`.f` 内のパスは `../../rtl/...` 形式。
+- 入口は二択: PowerShell なら `.\scripts\run.ps1 sim <top>`、
+  Linux/WSL なら `make TOP=<top> sim`。両者は等価。
+
+## TB に波形を仕込むときの定型
+
+```systemverilog
+$dumpfile("<top>_tb.vcd");
+$dumpvars(0, <top>_tb);
+```
+
+VCD は `run.ps1` / `Makefile` が自動で `sim/waves/` に移動する。
+
+## 静的解析
+
+- `verilator --lint-only` を WSL Ubuntu 経由で利用可能 (`run.ps1 lint` / `make lint`)。
+- 既定 (`rtl_all`) は警告ゼロを維持する。`-Strict` (`-Wall`) で残る `addra UNUSEDSIGNAL`
+  は ROM IP の意図された未使用ポート。
+
+## 触らないもの
+
+- `multi_cycle_dapapath.sv` という古い綴りは `multi_cycle_datapath.sv` に
+  改名済み。再導入しない。
+- 旧パッケージ (`reset/idle/...` 小文字) は `09f97d3` のスナップショットコミットに
+  残してある。`legacy/` はもう存在しない。
