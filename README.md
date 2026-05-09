@@ -45,6 +45,52 @@ SNN/
 
 ---
 
+## 別 PC でのセットアップ(クローン手順)
+
+### 1. 必要なツールをインストール
+
+| ツール | 必須度 | 入手先 / コマンド |
+|---|---|---|
+| **git** | 必須 | https://git-scm.com/ |
+| **Icarus Verilog 12.0** | 必須(`iverilog` / `vvp`) | http://bleyer.org/icarus/ (Windows インストーラ) |
+| **GTKWave** | 推奨(波形閲覧) | Icarus Verilog インストーラに同梱 |
+| **WSL Ubuntu + Verilator** | lint を使うなら | `wsl --install Ubuntu` → `sudo apt install -y verilator` |
+
+`iverilog` / `vvp` / `gtkwave` がコマンドラインから呼べる状態にしておく
+(インストーラの最後で PATH を通すオプションを ON にするのが楽)。
+
+### 2. リポジトリをクローン
+
+```powershell
+git clone https://github.com/<your-id>/<repo-name>.git
+cd <repo-name>
+```
+
+### 3. 動作確認
+
+```powershell
+.\scripts\run.ps1 list             # ターゲット一覧が出れば OK
+.\scripts\run.ps1 sim barrier      # 1 つビルド+実行してみる
+.\scripts\run.ps1 all              # 全 TB を回す
+.\scripts\run.ps1 lint             # (WSL+verilator が入っていれば) 静的解析
+```
+
+### 4. (補足) Linux / WSL 内で開発する場合
+
+```bash
+sudo apt install -y iverilog gtkwave verilator make
+git clone <URL>
+cd <repo-name>
+make TOP=barrier sim
+make all
+make lint
+```
+
+`scripts/run.ps1` は Windows ネイティブ用、`Makefile` は Linux/WSL/MSYS2 用で
+**機能は等価**。どちらの入口から入っても同じビルド結果になる。
+
+---
+
 ## ビルド・シミュレーション
 
 ### Windows (PowerShell, make 不要)
