@@ -17,10 +17,10 @@
 ../../rtl/common/shifter.sv
 
 # --- mem ---
-../../rtl/mem/rom_16x8_exclif1.sv
-../../rtl/mem/rom_16x8_exclif1_ip.sv
-../../rtl/mem/rom_8x8_inhlif1.sv
-../../rtl/mem/rom_8x8_inhlif1_ip.sv
+../../rtl/mem/rom_exc.sv
+../../rtl/mem/rom_exc_ip.sv
+../../rtl/mem/rom_inh.sv
+../../rtl/mem/rom_inh_ip.sv
 
 # --- sync ---
 ../../rtl/sync/multi_cycle_datapath.sv
@@ -36,9 +36,9 @@
 
 # --- network ---
 ../../rtl/network/multi_input_cu.sv
-../../rtl/network/multi_input_dp_16_exc_8_inh.sv
-../../rtl/network/multi_input_16_exc_8_inh.sv
-../../rtl/network/layer_8_neurons_16_inputs.sv
+../../rtl/network/multi_input_dp.sv
+../../rtl/network/multi_input.sv
+../../rtl/network/layer.sv
 
 # --- top ---
 ../../rtl/top/network.sv

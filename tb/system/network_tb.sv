@@ -3,6 +3,8 @@
 module network_tb;
   localparam int n_cycles            = 5;
   localparam int cycles_cnt_bitwidth = 4;
+  localparam int n_exc_inputs        = 162;
+  localparam int n_neurons           = 40;
   localparam time CLK_HALF = 10ns;
 
   logic        clk;
@@ -11,8 +13,8 @@ module network_tb;
   logic        sample_ready;
   logic        ready;
   logic        sample;
-  logic [15:0] in_spikes;
-  logic [7:0]  out_spikes;
+  logic [n_exc_inputs-1:0] in_spikes;
+  logic [n_neurons-1:0]    out_spikes;
 
   network #(
     .n_cycles(n_cycles),
@@ -58,8 +60,8 @@ module network_tb;
     // Wait until reset released
     @(posedge rst_n);
 
-    // Run a few samples
-    for (int k = 0; k < 20; k++) begin
+    // Run a few samples (fewer iterations than 8-neuron TB due to longer scans)
+    for (int k = 0; k < 5; k++) begin
       // Wait for DUT to be ready to accept a new start
       wait (ready === 1'b1);
       @(posedge clk);
@@ -73,7 +75,7 @@ module network_tb;
         @(posedge clk);
         if (sample) begin
           // Deterministic but non-trivial pattern
-          in_spikes = 16'h0001 << (k % 16);
+          in_spikes = n_exc_inputs'(1) << (k % n_exc_inputs);
         end
       end
     end
@@ -84,4 +86,3 @@ module network_tb;
   end
 
 endmodule
-

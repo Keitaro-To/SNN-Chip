@@ -1,5 +1,5 @@
 // From vivado_project_prototype/multi_input_16_exc_8_inh.vhd
-module multi_input_16_exc_8_inh #(
+module multi_input #(
   parameter int n_exc_inputs     = 16,
   parameter int n_inh_inputs     = 8,
   parameter int exc_cnt_bitwidth = 4,
@@ -10,7 +10,7 @@ module multi_input_16_exc_8_inh #(
   input  logic                       restart,
   input  logic                       start,
   input  logic [n_exc_inputs-1:0]     exc_spikes,
-  input  logic [n_inh_inputs-1:0]     inh_spikes,
+  input  logic [((n_inh_inputs > 0) ? n_inh_inputs : 1) - 1:0] inh_spikes,
   input  logic                       neurons_ready,
   output logic [exc_cnt_bitwidth-1:0] exc_cnt,
   output logic [inh_cnt_bitwidth-1:0] inh_cnt,
@@ -36,7 +36,7 @@ module multi_input_16_exc_8_inh #(
 
   assign out_sample = spike_sample;
 
-  multi_input_dp_16_exc_8_inh #(
+  multi_input_dp #(
     .n_exc_inputs(n_exc_inputs),
     .n_inh_inputs(n_inh_inputs),
     .exc_cnt_bitwidth(exc_cnt_bitwidth),
@@ -86,4 +86,3 @@ module multi_input_16_exc_8_inh #(
   );
 
 endmodule
-
