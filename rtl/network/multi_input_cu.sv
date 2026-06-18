@@ -18,12 +18,23 @@ module multi_input_cu (
   output logic spike_sample,
   output logic spike_rst_n,
   output logic neuron_restart,
-  output logic ready
+  output logic ready,
+  output logic scan_complete
 );
 
   import spiker_pkg::*;
 
   mi_states_t present_state, next_state;
+  logic scan_complete_d;
+
+  always_ff @(posedge clk) begin
+    if (!rst_n)
+      scan_complete_d <= 1'b0;
+    else
+      scan_complete_d <= (present_state == MI_EXC_UPDATE) && exc_stop;
+  end
+
+  assign scan_complete = scan_complete_d;
 
   // State transition
   always_ff @(posedge clk) begin

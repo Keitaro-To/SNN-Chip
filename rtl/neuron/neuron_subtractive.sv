@@ -16,7 +16,8 @@ module neuron_subtractive #(
   input  logic                                   exc_spike,
   input  logic                                   inh_spike,
   output logic                                   neuron_ready,
-  output logic                                   out_spike
+  output logic                                   out_spike,
+  output logic                                   exceed_v_th_out
 );
 
   logic [1:0] update_sel;
@@ -59,6 +60,8 @@ module neuron_subtractive #(
     .neuron_ready(neuron_ready),
     .out_spike(out_spike)
   );
+
+  assign exceed_v_th_out = exceed_v_th;
 
   and_mask #(.N(exc_weights_bit_width)) exc_mask (
     .input_bits(exc_weight),

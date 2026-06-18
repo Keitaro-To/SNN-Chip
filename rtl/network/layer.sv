@@ -34,7 +34,9 @@ module layer #(
   logic neuron_restart;
   logic barrier_ready;
   logic [n_neurons-1:0] out_spikes_inst;
+  logic [n_neurons-1:0] exceed_inst;
   logic out_sample;
+  logic scan_complete;
 
   logic [n_neurons-1:0] neuron_ready;
   logic [n_neurons*exc_weights_bit_width-1:0] exc_weights;
@@ -63,7 +65,8 @@ module layer #(
     .inh(inh),
     .out_sample(out_sample),
     .exc_spike(exc_spike),
-    .inh_spike(inh_spike)
+    .inh_spike(inh_spike),
+    .scan_complete(scan_complete)
   );
 
   generate
@@ -86,7 +89,8 @@ module layer #(
         .exc_spike(exc_spike),
         .inh_spike(inh_spike),
         .neuron_ready(neuron_ready[n]),
-        .out_spike(out_spikes_inst[n])
+        .out_spike(out_spikes_inst[n]),
+        .exceed_v_th_out(exceed_inst[n])
       );
     end
   endgenerate
@@ -131,8 +135,8 @@ module layer #(
     .clk(clk),
     .rst_n(rst_n),
     .restart(restart),
-    .out_sample(out_sample),
-    .reg_in(out_spikes_inst),
+    .out_sample(scan_complete),
+    .reg_in(exceed_inst),
     .ready(barrier_ready),
     .reg_out(out_spikes)
   );

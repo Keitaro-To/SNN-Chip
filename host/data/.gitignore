@@ -1,0 +1,5 @@
+# User-trained weights (place weights.pkl or weights.npy here)
+*.npy
+*.pkl
+*.pickle
+!.gitkeep

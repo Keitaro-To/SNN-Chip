@@ -1,0 +1,28 @@
+n_exc_inputs: 162
+n_neurons: 40
+n_cycles: 5
+exc_cnt_bitwidth: 8
+
+chip:
+  v_th: 16
+  shift: 3
+  neuron_bit_width: 16
+
+encoder:
+  image_height: 9
+  image_width: 18
+  threshold: 0.3
+
+decoder:
+  class0_neurons: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+  class1_neurons: [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
+
+train:
+  epochs: 30
+  batch_size: 32
+  lr: 0.01
+  weight_scale: 64.0
+  classes: [0, 1]
+
+paths:
+  weights_out: host/data/weights.npy

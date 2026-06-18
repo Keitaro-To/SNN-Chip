@@ -92,7 +92,13 @@ module neuron_cu_subtractive (
 
     unique case (present_state)
       NS_RESET: v_rst_n = 1'b0;
-      NS_IDLE:  neuron_ready = 1'b1;
+      NS_IDLE: begin
+        neuron_ready = 1'b1;
+        if (exc && inh && exceed_v_th)
+          out_spike = 1'b1;
+        else if (!exc && !inh && exceed_v_th)
+          out_spike = 1'b1;
+      end
       NS_INIT:  v_rst_n = 1'b0;
       NS_EXCITE: begin
         update_sel = 2'b10;

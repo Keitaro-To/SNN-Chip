@@ -1,0 +1,37 @@
+n_exc_inputs: 162
+n_neurons: 40
+n_cycles: 5
+
+# Population coding: 4 CartPole dims x 40 bins + 2 unused inputs
+bins_per_dim: 40
+dims:
+  - name: cart_pos
+    low: -2.4
+    high: 2.4
+  - name: cart_vel
+    low: -3.0
+    high: 3.0
+  - name: pole_angle
+    low: -0.418
+    high: 0.418
+  - name: pole_vel
+    low: -3.5
+    high: 3.5
+
+encoder:
+  sigma_bins: 1.5
+
+decoder:
+  left_neurons: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+  right_neurons: [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
+
+uart:
+  port: COM3
+  baudrate: 115200
+  timeout_s: 2.0
+
+protocol:
+  cmd_infer: 0x01
+  status_done: 0x80
+  infer_in_bytes: 21
+  infer_out_bytes: 5

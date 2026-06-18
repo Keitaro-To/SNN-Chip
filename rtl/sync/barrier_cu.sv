@@ -48,7 +48,11 @@ module barrier_cu (
 
     unique case (present_state)
       MI_RESET:  barrier_rst_n = 1'b0;
-      MI_IDLE:   ready = 1'b1;
+      MI_IDLE: begin
+        ready = 1'b1;
+        if (out_sample)
+          barrier_en = 1'b1;
+      end
       MI_INIT:   barrier_rst_n = 1'b0;
       MI_SAMPLE: barrier_en = 1'b1;
       default: ready = 1'b1;

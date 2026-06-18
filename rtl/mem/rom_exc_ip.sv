@@ -9,8 +9,24 @@ module rom_exc_ip #(
   output logic [n_neurons*weight_width-1:0] douta
 );
 
+  localparam int mem_depth = 1 << addr_width;
+  localparam int dout_width = n_neurons * weight_width;
+
+  logic [dout_width-1:0] mem [0:mem_depth-1];
+
+  initial begin
+    string weight_file;
+    if ($value$plusargs("WEIGHTS=%s", weight_file)) begin
+      $readmemh(weight_file, mem);
+    end else if ($test$plusargs("HOST_SIM")) begin
+      $readmemh("rom_exc_weights.hex", mem);
+    end else begin
+      $readmemh("../../sim/mem/rom_exc_weights.hex", mem);
+    end
+  end
+
   always_ff @(posedge clka) begin
-    douta <= {n_neurons{weight_width'(8'h10)}};
+    douta <= mem[addra];
   end
 
 endmodule

@@ -20,7 +20,8 @@ module multi_input #(
   output logic                       inh,
   output logic                       out_sample,
   output logic                       exc_spike,
-  output logic                       inh_spike
+  output logic                       inh_spike,
+  output logic                       scan_complete
 );
 
   logic spike_sample;
@@ -82,7 +83,8 @@ module multi_input #(
     .spike_sample(spike_sample),
     .spike_rst_n(spike_rst_n),
     .neuron_restart(neuron_restart),
-    .ready(ready)
+    .ready(ready),
+    .scan_complete(scan_complete)
   );
 
 endmodule
