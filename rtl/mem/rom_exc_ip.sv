@@ -1,4 +1,6 @@
 // Functional ROM model (was *_ip in VHDL)
+// Simulation: $readmemh with plusargs / relative paths.
+// Synthesis:  $readmemh("rom_exc_weights.hex") colocated in rtl/mem/ (run scripts/weights_to_rom.py).
 module rom_exc_ip #(
   parameter int n_neurons    = 8,
   parameter int weight_width = 8,
@@ -12,8 +14,14 @@ module rom_exc_ip #(
   localparam int mem_depth = 1 << addr_width;
   localparam int dout_width = n_neurons * weight_width;
 
+  (* rom_style = "block" *)
   logic [dout_width-1:0] mem [0:mem_depth-1];
 
+`ifdef SYNTHESIS
+  initial begin
+    $readmemh("rom_exc_weights.hex", mem);
+  end
+`else
   initial begin
     string weight_file;
     if ($value$plusargs("WEIGHTS=%s", weight_file)) begin
@@ -24,6 +32,7 @@ module rom_exc_ip #(
       $readmemh("../../sim/mem/rom_exc_weights.hex", mem);
     end
   end
+`endif
 
   always_ff @(posedge clka) begin
     douta <= mem[addra];

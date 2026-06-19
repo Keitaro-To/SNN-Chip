@@ -107,10 +107,36 @@ module multi_input_dp #(
         .cmp_out(inh_stop)
       );
     end else begin : gen_no_inh
-      assign inh_yes   = 1'b0;
-      assign inh_spike = 1'b0;
-      assign inh_stop  = 1'b1;
-      assign inh_cnt_sig = '0;
+      generic_or #(.N(1)) inh_or (
+        .or_in(inh_spikes),
+        .or_out(inh_yes)
+      );
+
+      reg_sync_rst #(.N(1)) inh_reg (
+        .clk(clk),
+        .en(inh_sample),
+        .rst_n(inh_rst_n),
+        .reg_in(inh_spikes),
+        .reg_out(inh_spikes_sampled)
+      );
+
+      assign inh_spike = inh_spikes_sampled[inh_cnt_sig];
+
+      cnt #(
+        .N(inh_cnt_bitwidth),
+        .rst_value(0)
+      ) inh_counter (
+        .clk(clk),
+        .cnt_en(inh_cnt_en),
+        .cnt_rst_n(inh_cnt_rst_n),
+        .cnt_out(inh_cnt_sig)
+      );
+
+      cmp_eq #(.N(inh_cnt_bitwidth)) inh_cmp (
+        .in0(inh_cnt_sig),
+        .in1('0),
+        .cmp_out(inh_stop)
+      );
     end
   endgenerate
 

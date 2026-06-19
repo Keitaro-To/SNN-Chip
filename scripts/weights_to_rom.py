@@ -20,6 +20,7 @@ DEFAULT_WEIGHTS = REPO_ROOT / "host" / "data" / "weights.pkl"
 FALLBACK_WEIGHTS = REPO_ROOT / "rtl" / "host" / "data" / "weights_seed_0.pkl"
 DEFAULT_PKL_CONN = "ES_EA_conn"
 HEX_OUT = REPO_ROOT / "sim" / "mem" / "rom_exc_weights.hex"
+HEX_OUT_RTL = REPO_ROOT / "rtl" / "mem" / "rom_exc_weights.hex"
 COE_OUT = REPO_ROOT / "sim" / "mem" / "rom_exc_weights.coe"
 
 
@@ -245,6 +246,7 @@ def main() -> int:
         )
 
     write_hex(weights, args.addr_width, args.hex_out)
+    write_hex(weights, args.addr_width, HEX_OUT_RTL)
     write_coe(weights, args.addr_width, args.coe_out)
     return 0
 

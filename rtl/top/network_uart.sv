@@ -1,18 +1,18 @@
 // FPGA top: network + UART host inference bridge.
 module network_uart #(
-  parameter int CLK_HZ               = 100_000_000,
-  parameter int BAUD                 = 115_200,
-  parameter int n_cycles             = 5,
-  parameter int cycles_cnt_bitwidth  = 4,
-  parameter int n_exc_inputs         = 162,
-  parameter int n_inh_inputs         = 0,
-  parameter int n_neurons            = 40,
-  parameter int exc_cnt_bitwidth     = 8,
-  parameter int inh_cnt_bitwidth     = 1,
-  parameter int neuron_bit_width     = 16,
+  parameter int CLK_HZ                = 125_000_000,
+  parameter int BAUD                  = 115_200,
+  parameter int n_cycles              = 5,
+  parameter int cycles_cnt_bitwidth   = 4,
+  parameter int n_exc_inputs          = 162,
+  parameter int n_inh_inputs          = 0,
+  parameter int n_neurons             = 40,
+  parameter int exc_cnt_bitwidth      = 8,
+  parameter int inh_cnt_bitwidth      = 1,
+  parameter int neuron_bit_width      = 16,
   parameter int inh_weights_bit_width = 8,
   parameter int exc_weights_bit_width = 8,
-  parameter int shift                = 3
+  parameter int shift                 = 3
 ) (
   input  logic clk,
   input  logic rst_n,

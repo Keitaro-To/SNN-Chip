@@ -76,7 +76,7 @@ module uart_infer #(
       if (rx_ready) begin
         unique case (state)
           ST_IDLE: begin
-            if (rx_byte == CMD_INFER) begin
+            if (rx_byte == CMD_INFER && !infer_busy) begin
               state <= ST_RX_PAYLOAD;
               rx_cnt <= '0;
             end
