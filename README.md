@@ -1,5 +1,14 @@
 # SNN チップ開発リポジトリ
 
+2 つの設計を置いています。
+
+| フォルダ | 内容 | 状態 |
+|---|---|---|
+| [`wta_lif_array/`](wta_lif_array/) | **WTA 付き直列 LIF ニューロンアレイ** (2026 年 9 月〜)。シフト減算の漏れ、タイル単位の WTA、並列版との等価性テスト、Nangate45 での合成・STA | 開発中 (現在の主題) |
+| `rtl/` `tb/` `sim/` `host/` ほか | Spiker 系の SNN 推論回路 (2026 年 6 月)。UART ホスト連携、Zybo Z7-20 向け Vivado フロー | 停止中 |
+
+以下は Spiker 系の説明です。
+
 Spiker(SNN: Spiking Neural Network)チップの SystemVerilog 実装。
 Icarus Verilog (iverilog + vvp) でシミュレーションする構成。
 

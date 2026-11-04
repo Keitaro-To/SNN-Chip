@@ -1,0 +1,25 @@
+# neuron_array (直列 LIF 版) を Nangate45 スタンダードセルへ合成するスクリプト
+# 実行 (synth/ の中で): yosys -l synth.log synth_asic.ys
+# NangateOpenCellLibrary_typical.lib は再配布しないので、各自で入手して ../lib/ に置く (git 管理外)
+# 階層は残したまま合成する (membrane と step_ctrl は 1 回ずつ合成され、stat の階層集計で個数分が積算される)
+
+read_verilog -sv ../rtl/membrane.sv
+read_verilog -sv ../rtl/step_ctrl.sv
+read_verilog -sv ../rtl/wta_rail.sv
+read_verilog -sv ../rtl/neuron_tile.sv
+read_verilog -sv ../rtl/neuron_array.sv
+hierarchy -top neuron_array
+synth -top neuron_array
+
+dfflibmap -liberty ../lib/NangateOpenCellLibrary_typical.lib
+abc -liberty ../lib/NangateOpenCellLibrary_typical.lib -constr abc_constr.f -D 1000
+opt_clean
+
+log
+log ================ RESULT: 面積 (階層集計の最後 "Chip area for top module" が合計 µm²) ================
+stat -liberty ../lib/NangateOpenCellLibrary_typical.lib -top neuron_array
+log
+log ================ RESULT: 遅延はこのログを "Delay =" で検索 (abc の stime 行、モジュールごと) ================
+log
+
+write_verilog -noattr neuron_array_netlist.v

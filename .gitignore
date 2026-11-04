@@ -48,3 +48,7 @@ docs/papers/*
 # Allow placeholders inside ignored dirs
 !sim/build/.gitkeep
 !sim/waves/.gitkeep
+
+# --- wta_lif_array: standard-cell library (not redistributed) and generated netlists ---
+wta_lif_array/lib/
+wta_lif_array/synth/*_netlist*.v
