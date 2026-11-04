@@ -12,7 +12,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent   # wta_lif_array/
+ROOT = Path(__file__).resolve().parent.parent   # リポジトリの直下
 RTL = ROOT / "rtl"
 REF = ROOT / "rtl_ref_parallel_if"
 TB = ROOT / "tb"
